@@ -8,6 +8,23 @@
       "expo-router"
     ],
     "name": "react-native-tracker",
-    "slug": "react-native-tracker"
+    "slug": "react-native-tracker",
+    "extra": {
+      "apiUrl": "http://65.1.92.142:5000",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "06b512e1-6ff2-410a-a0ef-2ef8aaa0f741"
+      }
+    },
+    "android": {
+      "permissions": [
+        "INTERNET",
+        "ACCESS_NETWORK_STATE",
+        "ACCESS_WIFI_STATE"
+      ],
+      "package": "com.pruthvesh.reactnativetracker"
+    }
   }
 }
