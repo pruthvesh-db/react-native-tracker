@@ -170,8 +170,8 @@ const LandingTab = ({navigation}) => {
           <TouchableOpacity style={styles.sidebarItem} onPress={() => navigation.navigate('Monthly Report')}>
             <Text style={styles.sidebarItemText}>Reports</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.sidebarItem} onPress={() => console.log('Navigate to Settings')}>
-            <Text style={styles.sidebarItemText}>Settings</Text>
+          <TouchableOpacity style={styles.sidebarItem} onPress={() => navigation.navigate('Add Catagory')}>
+            <Text style={styles.sidebarItemText}>Add Catagory</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.sidebarItem, { backgroundColor: 'red'}]} onPress={() => logout()}>
             <Text style={styles.sidebarItemText}>Sign Out</Text>

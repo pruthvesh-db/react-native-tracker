@@ -4,6 +4,7 @@ import NetInfo from '@react-native-community/netinfo';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Provider as PaperProvider } from 'react-native-paper';
 // import ChildNavigator from './ChildNavigator';
 
 import LoginPage from "./loginPage";
@@ -13,6 +14,7 @@ import { AuthContext, AuthProvider } from "../authValidator/authContext";
 import SignUpPage from "./SignUp";
 import MonthlyReport from "./Reports/MonthlyReport";
 import ProfileDetails from "./ProfileDetails";
+import AddCatagory from "./AddCatagory";
 
 
 const Stack = createNativeStackNavigator();
@@ -42,6 +44,7 @@ const AppNav = () => {
     }
 
     return (
+      <PaperProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
     <Stack.Navigator>
         {/* <Stack.Screen name="SignUp" component={SignUpPage} /> */}
@@ -51,9 +54,11 @@ const AppNav = () => {
         <Stack.Screen name="SignUp" component={SignUpPage} options={{ headerShown: false }} />
         <Stack.Screen name="Monthly Report" component={MonthlyReport} options={{ headerShown: false }} />
         <Stack.Screen name="Profile Details" component={ProfileDetails} options={{headerShown: false}} />
+        <Stack.Screen name="Add Catagory" component={AddCatagory} options={{headerShown: false}} />
 
     </Stack.Navigator>
     </GestureHandlerRootView>
+    </PaperProvider>
         
     );
   };
