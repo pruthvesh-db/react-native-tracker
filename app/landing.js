@@ -1,5 +1,5 @@
 import React, {useContext, useState, useEffect} from 'react'
-import { View, Text, StyleSheet, TextInput, Button, TouchableOpacity, Alert, ScrollView, Modal, Platform, ActivityIndicator  } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ScrollView, Modal, Platform, ActivityIndicator, FlatList  } from 'react-native'
 import { AuthContext } from '../authValidator/authContext'
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -7,6 +7,7 @@ import Constants from 'expo-constants';
 import { format } from 'date-fns';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Import the icon library
+import { Button, Divider } from 'react-native-paper';
 
 
 const apiUrl = Constants.expoConfig.extra.apiUrl;
@@ -15,79 +16,155 @@ const LandingTab = ({navigation}) => {
 
   const {ServerIP, logout, userToken} = useContext(AuthContext);
 
-  const [category, setCategory] = useState({});
-  const [CatagoryOptions, setCatagoryOptions] = useState([]);
+  const [category, setCategory] = useState(null);
+  const [categoryLabel, setCategoryLabel] = useState(null);
+  const [categoryOptions, setCategoryOptions] = useState([]);
   const [subCategory, setSubCategory] = useState('');
-  const [SubCatagoryOptions, setSubCatagoryOptions] = useState([]);
+  const [subCategoryLabel, setSubCategoryLabel] = useState('');
+  const [subCategoryOptions, setSubCategoryOptions] = useState([]);
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState(new Date()); // Default to today's date
-  const [type, setType] = useState('Want');
+  const [type, setType] = useState('Need');
   const [description, setDescription] = useState('');
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [sidebarVisible, setSidebarVisible] = useState(false); // State to toggle sidebar visibility
+  const [catModalVisible, setCatModalVisible] = useState(false);
+  const [search, setSearch] = useState('');
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [filteredOptions, setFilteredOptions] = useState([]);
+
+  const [subCatModalVisible, setSubCatModalVisible] = useState(false);
+  const [subCatSearch, setSubCatSearch] = useState('');
+  const [subCatFilteredOptions, setSubCatFilteredOptions] = useState([]);
   // const [loading, setLoading] = useState(true); // State to handle loading
 
   // Function to handle value change and update the category state with the label
   const handleCatagory = async (selectedValue) => {
-    const selectedOption = CatagoryOptions.find(option => option.value === selectedValue);
+    const selectedOption = categoryOptions.find(option => option.value === selectedValue);
     if (selectedOption) {
       setCategory(selectedOption);
     }
   };
 
-  useEffect(() => {
-    if (category) {
-      fetchSubCatagory();
-    }
-  }, [category]);
+  // useEffect(() => {
+  //   if (category) {
+  //     fetchSubCatagory();
+  //   }
+  // }, [category]);
+
+  // const fetchCatagory = async () => {
+  //   try {
+  //     const response = await axios.get(`${ServerIP}/api/category/fetchcategory`, {
+  //       headers: {
+  //         'auth-token': userToken, // Add the token here
+  //         'Content-Type': 'application/json' // Set content type if necessary
+  //       }
+  //     }); // Replace with your API URL
+  //     const data = response.data;
+      
+  //     // Map data to the format required by Picker
+  //     const Catagoty = data.map(item => ({
+  //       label: item.type,
+  //       value: item.id
+  //     }));
+
+  //     setCategoryOptions(Catagoty);
+  //     // setLoading(false);
+  //   } catch (error) {
+  //     console.error('Error fetching options:', error);
+  //     // setLoading(false);
+  //   }
+  // };
 
   const fetchCatagory = async () => {
-    try {
-      const response = await axios.get(`${ServerIP}/api/category/fetchcategory`, {
-        headers: {
-          'auth-token': userToken, // Add the token here
-          'Content-Type': 'application/json' // Set content type if necessary
+        try {
+            const response = await axios.get(`${ServerIP}/api/category/fetchcategory`, {
+                headers: {
+                    'auth-token': userToken,
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = response.data;
+
+            // Map data to the format required
+            const catagoryOptions = data.map(item => ({
+                label: item.type,
+                value: item.id
+            }));
+
+            setCategoryOptions(catagoryOptions);
+            setFilteredOptions(catagoryOptions);
+        } catch (error) {
+            console.error('Error fetching options:', error);
         }
-      }); // Replace with your API URL
-      const data = response.data;
-      
-      // Map data to the format required by Picker
-      const Catagoty = data.map(item => ({
-        label: item.type,
-        value: item.id
-      }));
+    };
+    const handleSelect = (value, label) => {
+      console.log(`${value} ......... ${label}`);
+      setCategory(value);
+      setCategoryLabel(label);
+      console.log(categoryLabel);
+      setCatModalVisible(false);
+    };
 
-      setCatagoryOptions(Catagoty);
-      // setLoading(false);
-    } catch (error) {
-      console.error('Error fetching options:', error);
-      // setLoading(false);
-    }
-  };
+    const handleSelectSubCat = (value, label) => {
+      setSubCategory(value);
+      setSubCategoryLabel(label);
+      console.log(categoryLabel);
+      setSubCatModalVisible(false);
+    };
 
+// fetchCatagory();
+useEffect(() => {
   fetchCatagory();
+
+}, []);
+
+useEffect(() => {
+  if (search === '') {
+      setFilteredOptions(categoryOptions);
+  } else {
+      setFilteredOptions(categoryOptions.filter(option =>
+          option.label.toLowerCase().includes(search.toLowerCase())
+      ));
+  }
+}, [search, categoryOptions]);
+
+useEffect(() => {
+  if (subCatSearch === '') {
+    setSubCatFilteredOptions(subCategoryOptions);
+  } else {
+    setSubCatFilteredOptions(subCategoryOptions.filter(option =>
+          option.label.toLowerCase().includes(subCatSearch.toLowerCase())
+      ));
+  }
+}, [subCatSearch, subCategoryOptions]);
+
+  // fetchCatagory();
 
   const fetchSubCatagory = async () => {
     console.log("API Hittttt");
+    console.log(`${ServerIP}/api/category/fetchsubcat/${category}`)
     try {
-      const response = await axios.get(`${ServerIP}/api/category/fetchsubcat/${category.value}`, {
+      const response = await axios.get(`${ServerIP}/api/category/fetchsubcat/${category}`, {
         headers: {
           // 'auth-token': userToken, // Add the token here
           'Content-Type': 'application/json' // Set content type if necessary
         }
       }); // Replace with your API URL
       const SubCatdata = response.data;
+      console.log(SubCatdata);
       
       // Map data to the format required by Picker
-      const SubCatagoty = SubCatdata.map(item => ({
+      const subCatagoryOptions = SubCatdata.map(item => ({
         label: item.type,
         value: item.id
       }));
-
-      setSubCatagoryOptions(SubCatagoty);
+      
+      setSubCategoryOptions(subCatagoryOptions);
+      setSubCatFilteredOptions(subCatagoryOptions);
       // setLoading(false);
     } catch (error) {
-      console.error('Error fetching options:', error);
+      console.error('Error fetching SubCategory:', error);
       // setLoading(false);
     }
   };
@@ -108,8 +185,8 @@ const LandingTab = ({navigation}) => {
     }
       // Example submission logic
       const formData = {
-        category,
-        subCategory,
+        categoryLabel,
+        subCategoryLabel,
         amount: parseInt(amount, 10),
         date: format(date, 'yyyy-MM-dd'),
         type,
@@ -122,8 +199,8 @@ const LandingTab = ({navigation}) => {
         const response = await axios.post(
           `${ServerIP}/api/expense/addexpense`,
           {
-            category: category.label,
-            sub_category: subCategory,
+            category: categoryLabel,
+            sub_category: subCategoryLabel,
             amount,
             date : format(date, 'yyyy-MM-dd'),
             type,
@@ -189,7 +266,7 @@ const LandingTab = ({navigation}) => {
           <Text style={styles.headerText}>Add Expense</Text>
         </View>
         <ScrollView contentContainerStyle={styles.content}>
-          <View style={styles.formGroup}>
+          {/* <View style={styles.formGroup}>
             <Text style={styles.label}>Category:</Text>
             <Picker
               
@@ -197,14 +274,59 @@ const LandingTab = ({navigation}) => {
               onValueChange={handleCatagory}
               selectedValue={category.value}
             >
-              {CatagoryOptions.map((Catoption) => (
+              {CategoryOptions.map((Catoption) => (
                 <Picker.Item label={Catoption.label} value={Catoption.value} />
               ))}
             </Picker>
+                </View> */}
+    <View style={styles.formGroup}>
+                <Text style={styles.label}>Category:</Text>
+                <TouchableOpacity onPress={() => setCatModalVisible(true)} style={styles.picker}>
+                <Text style={styles.selectedValue}>
+                        {category ? categoryOptions.find(option => option.value === category)?.label : 'Select category'}
+                        {/* {'Search Category'} */}
+                    </Text>
+                </TouchableOpacity>
+                <Modal
+                    transparent={true}
+                    visible={catModalVisible}
+                    onRequestClose={() => setCatModalVisible(false)}
+                >
+                    <View style={styles.modalBackground}>
+                        <View style={styles.modalContainer}>
+                            <TextInput
+                                style={styles.searchInput}
+                                placeholder="Search Catagory"
+                                value={search}
+                                onChangeText={setSearch}
+                                // onSubmitEditing={AddCatagoryAPI} // Trigger on enter press
+                            />
+                            <Divider />
+                            <FlatList
+                                data={filteredOptions}
+                                keyExtractor={(item) => item.value.toString()}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity onPress={() => {handleSelect(item.value, item.label); setIsDisabled(false);}} style={styles.item}>
+                                        <Text style={styles.itemText}>{item.label}</Text>
+                                    </TouchableOpacity>
+                                )}
+                                style={styles.list} // Style for FlatList
+                                ListEmptyComponent={
+                                    <View style={styles.emptyContainer}>
+                                        <Text>No results found</Text>
+                                    </View>
+                                }
+                            />
+                            <Button mode="contained" onPress={() => setCatModalVisible(false)} style={styles.closeButton}>
+                                Close
+                            </Button>
+                        </View>
+                    </View>
+                </Modal>
                 </View>
 
           <View style={styles.formGroup}>
-            <Text style={styles.label}>Sub-Category:</Text>
+            {/* <Text style={styles.label}>Sub-Category:</Text>
             <Picker
               
               style={styles.picker}
@@ -212,10 +334,54 @@ const LandingTab = ({navigation}) => {
               selectedValue={subCategory}
               
             >
-              {SubCatagoryOptions.map((SubCatoption) => (
+              {SubCategoryOptions.map((SubCatoption) => (
                 <Picker.Item label={SubCatoption.label} value={SubCatoption.value} />
               ))}
-            </Picker>
+            </Picker> */}
+            <View style={styles.formGroup}>
+                <Text style={styles.label}>Sub-Category:</Text>
+                <TouchableOpacity onPress={() => {setSubCatModalVisible(true); fetchSubCatagory();}} style={styles.picker}>
+                <Text style={styles.selectedValue}>
+                        {subCategory ? subCategoryOptions.find(option => option.value === subCategory)?.label : 'Select Sub-category'}
+                    </Text>
+                </TouchableOpacity>
+                <Modal
+                    transparent={true}
+                    visible={subCatModalVisible}
+                    onRequestClose={() => setSubCatModalVisible(false)}
+                >
+                    <View style={styles.modalBackground}>
+                        <View style={styles.modalContainer}>
+                            <TextInput
+                                style={styles.searchInput}
+                                placeholder="Search Catagory"
+                                value={subCatSearch}
+                                onChangeText={setSubCatSearch}
+                                // onSubmitEditing={AddCatagoryAPI} // Trigger on enter press
+                            />
+                            <Divider />
+                            <FlatList
+                                data={subCatFilteredOptions}
+                                keyExtractor={(item) => item.value.toString()}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity onPress={() => {handleSelectSubCat(item.value, item.label); setIsDisabled(false);}} style={styles.item}>
+                                        <Text style={styles.itemText}>{item.label}</Text>
+                                    </TouchableOpacity>
+                                )}
+                                style={styles.list} // Style for FlatList
+                                ListEmptyComponent={
+                                    <View style={styles.emptyContainer}>
+                                        <Text>No results found</Text>
+                                    </View>
+                                }
+                            />
+                            <Button mode="contained" onPress={() => setSubCatModalVisible(false)} style={styles.closeButton}>
+                                Close
+                            </Button>
+                        </View>
+                    </View>
+                </Modal>
+                </View>
           </View>
 
           <View style={styles.formGroup}>
@@ -253,8 +419,8 @@ const LandingTab = ({navigation}) => {
               style={styles.picker}
               onValueChange={(itemValue) => setType(itemValue)}
             >
-              <Picker.Item label="Want" value="Want" />
               <Picker.Item label="Need" value="Need" />
+              <Picker.Item label="Want" value="Want" />
             </Picker>
           </View>
 
@@ -290,7 +456,7 @@ const styles = StyleSheet.create({
     left: 0,
     bottom: 0,
     width: 200,
-    backgroundColor: '#2E7D32',
+    backgroundColor: '#ffbe98',
     padding: 10,
     justifyContent: 'flex-start',
     zIndex: 1,
@@ -365,6 +531,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 8,
     backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    paddingHorizontal: 10,
   },
   dateButton: {
     backgroundColor: '#4CAF50',
@@ -390,6 +558,46 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  selectedValue: {
+    fontSize: 16,
+    color: '#000000',
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContainer: {
+    width: '80%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+  },
+  searchInput: {
+    height: 40,
+    borderColor: '#4CAF50',
+    borderWidth: 1,
+    borderRadius: 4,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  item: {
+    padding: 10,
+  },
+  itemText: {
+    fontSize: 16,
+  },
+  list: {
+    maxHeight: 200, // Set the max height of the FlatList
+  },
+  closeButton: {
+    marginTop: 10,
+  },
+  emptyContainer: {
+    padding: 20,
+    alignItems: 'center',
   },
 });
 

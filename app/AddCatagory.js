@@ -3,10 +3,12 @@ import { View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, Modal,
 import { Button, Divider } from 'react-native-paper';
 import { AuthContext } from '../authValidator/authContext';
 import axios from 'axios';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const AddCatagory = () => {
     const { ServerIP, userToken } = useContext(AuthContext);
 
+    const [loading, setLoading] = useState(false);
     
     const [catagoryOptions, setCatagoryOptions] = useState([]);
     const [search, setSearch] = useState('');
@@ -46,6 +48,7 @@ const AddCatagory = () => {
     };
 
     const fetchSubCatagory = async () => {
+        setLoading(true);
         try {
             const response = await axios.get(`${ServerIP}/api/category/fetchsubcat/${category}`, {
                 headers: {
@@ -62,11 +65,14 @@ const AddCatagory = () => {
             }));
             console.log("Sub API Hitttttt");
             console.log(data);
+            setLoading(false);
             // console.log(`${ServerIP}/api/category/fetchsubcat/${category}`);
             setSubCatagoryOptions(SubCatagoryOptions);
             setSubFilteredOptions(SubCatagoryOptions);
+            
         } catch (error) {
-            console.error('Error fetching options:', error);
+            console.error('Error fetching SubCatagory');
+            setLoading(false);
         }
     };
 
@@ -110,8 +116,11 @@ const AddCatagory = () => {
         }
     };
 
+
+
     useEffect(() => {
         fetchCatagory();
+
     }, []);
 
     useEffect(() => {
@@ -139,48 +148,19 @@ const AddCatagory = () => {
         setSubModalVisible(false);
     };
 
-    // const handleAddOrSelectCategory = async () => {
-    //     const existingOption = catagoryOptions.find(option =>
-    //         option.label.toLowerCase() === search.toLowerCase()
-    //     );
+    // const handleFetchSubCat = () => {
+    //     fetchSubCatagory(); 
+    //     setSubModalTwoVisible(true);
+           
+    // }
 
-    //     if (existingOption) {
-    //         handleSelect(existingOption.value);
-    //     } else if (search.trim() !== '') {
-    //         try {
-    //             const response = await axios.post(`${ServerIP}/api/category/addcategory`, 
-    //                 { catagory: search, },
-    //                 {
-    //                     headers: {
-    //                         'auth-token': userToken,
-    //                         'Content-Type': 'application/json'
-    //                     }
-    //                 }
-    //             );
-
-    //             console.log(search);
-    //             const addedCategory = response.data;
-    //             const newOption = { label: addedCategory.type, value: addedCategory.id };
-    //             setCatagoryOptions(prevOptions => [...prevOptions, newOption]);
-    //             setFilteredOptions(prevOptions => [...prevOptions, newOption]);
-    //             setCategory(newOption.value);
-    //             setSearch('');
-    //             setModalVisible(false);
-    //         } catch (error) {
-    //             console.error('Error adding category:', error);
-    //             Alert.alert('Error', 'Failed to add new category');
-    //         }
-    //     }
-    // };
 
     return (
         <ScrollView contentContainerStyle={styles.content}>
+
             <View style={styles.formGroup}>
                 <Text style={styles.mainlabel}>Add Category</Text>
                 <TouchableOpacity onPress={() => {setModalVisible(true); fetchCatagory();}} style={styles.picker}>
-                    {/* <Text style={styles.selectedValue}>
-                        {category ? catagoryOptions.find(option => option.value === category)?.label : 'Select a category'}
-                    </Text> */}
                     <Text style={styles.selectedValue}>
                         {'Search Category'}
                     </Text>
@@ -229,7 +209,12 @@ const AddCatagory = () => {
             <View style={styles.formGroup}>
                 <View style={styles.formSubGroup}>
                 <Text style={styles.mainlabel}>Add SubCategory</Text>
-                <TouchableOpacity onPress={() => setSubModalVisible(true)} style={styles.picker}>
+                <Spinner
+                visible={loading}
+                textContent={'Loading...'}
+                textStyle={styles.spinnerTextStyle}
+            />
+                <TouchableOpacity onPress={() => {setSubModalVisible(true); fetchCatagory();}} style={styles.picker}>
                     <Text style={styles.selectedValue}>
                         {category ? catagoryOptions.find(option => option.value === category)?.label : 'Select category'}
                     </Text>
@@ -246,14 +231,14 @@ const AddCatagory = () => {
                                 placeholder="Search Catagory"
                                 value={search}
                                 onChangeText={setSearch}
-                                onSubmitEditing={AddCatagoryAPI} // Trigger on enter press
+                                // onSubmitEditing={AddCatagoryAPI} // Trigger on enter press
                             />
                             <Divider />
                             <FlatList
                                 data={filteredOptions}
                                 keyExtractor={(item) => item.value.toString()}
                                 renderItem={({ item }) => (
-                                    <TouchableOpacity onPress={() => {handleSelect(item.value); setIsDisabled(false); fetchSubCatagory()}} style={styles.item}>
+                                    <TouchableOpacity onPress={() => {handleSelect(item.value); setIsDisabled(false);}} style={styles.item}>
                                         <Text style={styles.itemText}>{item.label}</Text>
                                     </TouchableOpacity>
                                 )}
@@ -273,7 +258,7 @@ const AddCatagory = () => {
                 </View>
             {/* ------------------------------------ */}
                 <View style={styles.formSubGroup}>
-                <TouchableOpacity onPress={() => setSubModalTwoVisible(true)} style={[styles.picker, isDisabled && styles.disabledButton]} disabled={isDisabled}>
+                <TouchableOpacity disabled={isDisabled} onPress={() => {fetchSubCatagory(); setSubModalTwoVisible(true);}} style={[styles.picker, isDisabled && styles.disabledButton]}>
                     <Text style={styles.selectedValue}>
                         {'Search SubCategory'}
                     </Text>
