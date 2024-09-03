@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#E8F5E9',
+    backgroundColor: '#white',
   },
   loading: {
     flex: 1,
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   },
   head: {
     height: 50,
-    backgroundColor: '#4CAF50',
+    backgroundColor: 'orange',
   },
   text: {
     margin: 6,

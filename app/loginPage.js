@@ -46,6 +46,7 @@ const validateIpAddress = (ip) => {
 
   return (
     <View style={styles.container}>
+      {/* <Text style={styles.header}>Welcome to Expence Tracker</Text> */}
       <Text style={styles.header}>LogIn</Text>
 
       <View style={styles.inputContainer}>
@@ -76,13 +77,13 @@ const validateIpAddress = (ip) => {
         <Checkbox 
           value={agree}
           onValueChange={() => setAgree(!agree)}
-          color={agree ? "#1E90FF" : undefined}
+          color={agree ? "orange" : undefined}
         />
         <Text style={styles.checkboxText}>I agree to the Terms & Conditions</Text>
       </View>
 
       <TouchableOpacity 
-        style={[styles.button, { backgroundColor: agree ? "#1E90FF" : "#B0BEC5" }]}
+        style={[styles.button, { backgroundColor: agree ? "orange" : "#B0BEC5" }]}
         disabled={!agree}
         onPress={() => {login(userName, password)}}
         onLongPress={handleLongPress}
@@ -142,8 +143,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 30,
-    paddingTop: 40,
-    backgroundColor: '#E1F5FE', // Light blue background
+    paddingTop: '30%',
+    backgroundColor: '#ffe5b0'
   },
   header: {
     fontSize: 28,
@@ -157,12 +158,12 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    color: '#00796B', // Teal color for labels
+    color: 'black', // Teal color for labels
     marginBottom: 5,
   },
   input: {
     backgroundColor: '#FFF',
-    borderColor: '#4CAF50', // Green border for inputs
+    borderColor: 'orange',
     borderWidth: 2,
     borderRadius: 8,
     paddingHorizontal: 15,
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
   checkboxText: {
     marginLeft: 10,
     fontSize: 14,
-    color: '#004D40', // Dark teal color for checkbox text
+    color: 'black', // Dark teal color for checkbox text
   },
   button: {
     paddingVertical: 12,
@@ -187,7 +188,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   signupbutton: {
-    backgroundColor: "#1E90FF",
+    backgroundColor: "orange",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,

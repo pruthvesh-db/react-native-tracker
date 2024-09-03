@@ -178,6 +178,7 @@ const AddCatagory = () => {
                                 value={search}
                                 onChangeText={setSearch}
                                 onSubmitEditing={AddCatagoryAPI} // Trigger on enter press
+                                placeholderTextColor="#888888"
                             />
                             <Divider />
                             <FlatList
@@ -231,6 +232,7 @@ const AddCatagory = () => {
                                 placeholder="Search Catagory"
                                 value={search}
                                 onChangeText={setSearch}
+                                placeholderTextColor="#888888"
                                 // onSubmitEditing={AddCatagoryAPI} // Trigger on enter press
                             />
                             <Divider />
@@ -272,10 +274,11 @@ const AddCatagory = () => {
                         <View style={styles.modalContainer}>
                             <TextInput
                                 style={styles.searchInput}
-                                placeholder="Search Catagory"
+                                placeholder="Search or add new..."
                                 value={SubSearch}
                                 onChangeText={setSubSearch}
-                                onSubmitEditing={AddCatagoryAPI} // Trigger on enter press
+                                onSubmitEditing={AddSubCatagoryAPI} // Trigger on enter press
+                                placeholderTextColor="#888888"
                             />
                             <Divider />
                             <FlatList
@@ -312,7 +315,7 @@ const styles = StyleSheet.create({
     content: {
         flexGrow: 1,
         padding: 20,
-        backgroundColor: '#E8F5E9',
+        backgroundColor: 'white',
     },
     formGroup: {
         marginBottom: 50,
@@ -322,7 +325,7 @@ const styles = StyleSheet.create({
     },
     mainlabel: {
         fontSize: 22,
-        color: '#388E3C',
+        color: 'black',
         marginBottom: 8,
         textAlign: 'center',
     },
@@ -333,7 +336,7 @@ const styles = StyleSheet.create({
     },
     picker: {
         height: 45,
-        borderColor: '#4CAF50',
+        borderColor: 'orange',
         borderWidth: 2,
         borderRadius: 8,
         backgroundColor: '#FFFFFF',
@@ -358,7 +361,7 @@ const styles = StyleSheet.create({
     },
     searchInput: {
         height: 40,
-        borderColor: '#4CAF50',
+        borderColor: 'orange',
         borderWidth: 1,
         borderRadius: 4,
         marginBottom: 10,
@@ -375,6 +378,7 @@ const styles = StyleSheet.create({
     },
     addButton: {
         marginTop: 10,
+        backgroundColor: 'orange',
     },
     closeButton: {
         marginTop: 10,

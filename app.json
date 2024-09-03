@@ -24,7 +24,11 @@
         "ACCESS_NETWORK_STATE",
         "ACCESS_WIFI_STATE"
       ],
-      "package": "com.pruthvesh.reactnativetracker"
+      "package": "com.pruthvesh.reactnativetracker",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#FFFFFF"
+      }
     }
   }
 }

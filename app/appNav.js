@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider as PaperProvider } from 'react-native-paper';
 // import ChildNavigator from './ChildNavigator';
 
+
 import LoginPage from "./loginPage";
 import LandingTab from "./landing";
 // import AppNav from "./appNav";
@@ -15,6 +16,7 @@ import SignUpPage from "./SignUp";
 import MonthlyReport from "./Reports/MonthlyReport";
 import ProfileDetails from "./ProfileDetails";
 import AddCatagory from "./AddCatagory";
+// import NavBar from "./navBar";
 
 
 const Stack = createNativeStackNavigator();
@@ -55,6 +57,7 @@ const AppNav = () => {
         <Stack.Screen name="Monthly Report" component={MonthlyReport} options={{ headerShown: false }} />
         <Stack.Screen name="Profile Details" component={ProfileDetails} options={{headerShown: false}} />
         <Stack.Screen name="Add Catagory" component={AddCatagory} options={{headerShown: false}} />
+        {/* <Stack.Screen name="navBar" component={NavBar} options={{headerShown: false}} /> */}
 
     </Stack.Navigator>
     </GestureHandlerRootView>
