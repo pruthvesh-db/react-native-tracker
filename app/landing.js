@@ -9,7 +9,6 @@ import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Import the icon library
 import { Button, Divider } from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { LinearGradient } from 'expo-linear-gradient';
 import NavBar from './navBar';
 import Model from 'react-native-modal'
 
