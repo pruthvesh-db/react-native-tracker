@@ -395,7 +395,7 @@ useEffect(() => {
 
 
             <View style={
-							{marginTop: 260}
+							{marginTop: '75%'}
 						}>
 							
 											<TouchableOpacity style={
