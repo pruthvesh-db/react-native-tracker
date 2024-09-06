@@ -9,8 +9,8 @@ import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Import the icon library
 import { Button, Divider } from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import NavBar from './navBar';
 import Model from 'react-native-modal'
+
 
 
 const apiUrl = Constants.expoConfig.extra.apiUrl;
@@ -161,10 +161,10 @@ const LandingTab = ({navigation}) => {
     };
 
 // fetchCatagory();
-useEffect(() => {
-  fetchCatagory();
+// useEffect(() => {
+//   fetchCatagory();
 
-}, []);
+// }, []);
 
 useEffect(() => {
   if (search === '') {
@@ -225,15 +225,15 @@ useEffect(() => {
   //   setDate(currentDate);
   // };
 
-  const handleDateChange = (event, selectedDate) => {
-    // The event might be 'undefined' when the user cancels the picker
-    if (event.type === 'set') {
-      setDate(selectedDate || date);
-      setShowDatePicker(false);
-    } else if (event.type === 'dismissed') {
-      setShowDatePicker(false);
-    }
-  };
+  // const handleDateChange = (event, selectedDate) => {
+  //   // The event might be 'undefined' when the user cancels the picker
+  //   if (event.type === 'set') {
+  //     setDate(selectedDate || date);
+  //     setShowDatePicker(false);
+  //   } else if (event.type === 'dismissed') {
+  //     setShowDatePicker(false);
+  //   }
+  // };
 
   const handleSubmit = async () => {
     if (!category || !subCategory || !amount || !description) {
@@ -327,7 +327,6 @@ useEffect(() => {
         </LinearGradient>
       )} */}
 
-      {/* {sidebarVisible && <NavBar/>} */}
       {/* ______________________________________________________________________________________________________________________________ */}
 
       <View >
@@ -335,6 +334,7 @@ useEffect(() => {
 				backdropOpacity={0.8}>
 				<View style={
 					{
+            
 						width: '80%',
 						height: '100%',
             marginLeft: -17,
@@ -345,6 +345,7 @@ useEffect(() => {
 				}>
 					<View style={
 						{
+              flex: 1,
 							width: '80%',
 							height: '95%',
 							backgroundColor: 'white',
@@ -352,7 +353,7 @@ useEffect(() => {
 						}
 					}>
 						<View style={
-							{marginTop: 250}
+							{marginTop: 250, flex: 1,}
 						}>
 							<FlatList data={
 									[
@@ -395,7 +396,7 @@ useEffect(() => {
 
 
             <View style={
-							{marginTop: '75%'}
+							{justifyContent: 'flex-end'}
 						}>
 							
 											<TouchableOpacity style={
@@ -466,7 +467,11 @@ useEffect(() => {
 									{
 										fontSize: 18,
 										fontWeight: '600',
-										color: 'black'
+										color: 'black',
+                    width: 100,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
 									}
 								}>{firstName} {lastName}</Text>
 								<Text style={
@@ -577,7 +582,7 @@ useEffect(() => {
                 </View> */}
     <View style={styles.formGroup}>
                 <Text style={styles.label}>Category:</Text>
-                <TouchableOpacity onPress={() => setCatModalVisible(true)} style={styles.picker}>
+                <TouchableOpacity onPress={() => {{setCatModalVisible(true)}; {fetchCatagory()}}} style={styles.picker}>
                 <Text style={styles.selectedValue}>
                         {category ? categoryOptions.find(option => option.value === category)?.label : 'Select category'}
                         {/* {'Search Category'} */}
@@ -908,7 +913,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     height: 40,
-    borderColor: '#4CAF50',
+    borderColor: 'orange',
     borderWidth: 1,
     borderRadius: 4,
     marginBottom: 10,
