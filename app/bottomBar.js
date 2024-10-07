@@ -5,13 +5,6 @@ import Icon from 'react-native-vector-icons/FontAwesome'; // You can use icons f
 import { View, Text } from 'react-native';
 import ReportEntry from './Reports/ReportEntry';
 
-// const BottomBar = () => {
-//   return (
-//     <View>
-//       <Text>bottomBar</Text>
-//     </View>
-//   )
-// }
 
 const Tab = createBottomTabNavigator();
 
@@ -35,7 +28,7 @@ const CashbackScreen = () => (
 
 const Report = () => (
   <View style={{ flex: 1
-    
+
   }}>
     <ReportEntry/>
   </View>
