@@ -3,6 +3,7 @@ import React from 'react'
 import AppNav from './appNav'
 import { AuthProvider } from '../authValidator/authContext'
 import { ServerConfig } from '../authValidator/ServerConfig'
+import { ReportProvider } from './Reports/ReportsAPI'
 
 
 const index = () => {
@@ -10,7 +11,9 @@ const index = () => {
 
 
     <AuthProvider>
+      <ReportProvider>
       <AppNav />
+      </ReportProvider>
     </AuthProvider>
 
 

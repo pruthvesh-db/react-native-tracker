@@ -10,6 +10,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons'; // Import the icon l
 import { Button, Divider } from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Model from 'react-native-modal'
+import * as Location from 'expo-location';
+import BottomBar from './bottomBar';
 
 
 
@@ -45,6 +47,43 @@ const LandingTab = ({navigation}) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [contactNo, setContactNo] = useState('');
+
+// _______________________________________________________________________________________________________________________
+
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+useEffect(() => {
+    (async () => {
+      // Request permissions
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      // Get location
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+      console.log(location);
+    })();
+  }, []);
+
+  const handleGetLocation = async () => {
+    // Check permissions
+    let { status } = await Location.getForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied');
+      return;
+    }
+
+    // Get location
+    let location = await Location.getCurrentPositionAsync({});
+    setLocation(location);
+    console.log(location);
+  };
+
+  // ______________________________________________________________________________________________________________
 
   const showDatePicker = () => setDatePickerVisibility(true);
   const hideDatePicker = () => setDatePickerVisibility(false);
@@ -367,7 +406,8 @@ useEffect(() => {
 											icon: require('../assets/master.png')
 										}, {
 											title: 'Reports',
-                      component: 'Monthly Report',
+                      component: 'Report Entry',
+                      // component: 'Monthly Report',
 											icon: require('../assets/report1.png')
 										}
 									]
@@ -567,6 +607,21 @@ useEffect(() => {
           <Text style={styles.headerText}>Add Expense</Text>
         </View>
         <ScrollView contentContainerStyle={styles.content}>
+
+          {/* <View style={styles.boxContainer}>
+            <View style={styles.box}>
+            <Text style={styles.boxText}>Total Income</Text>
+          </View>
+          <View style={styles.box}>
+            <Text style={styles.boxText}>Used Amount</Text>
+          </View>
+          <View style={styles.box}>
+            <Text style={styles.boxText}>Balance Amount</Text>
+          </View>
+          </View> */}
+          {/* <BottomBar/> */}
+
+          
           {/* <View style={styles.formGroup}>
             <Text style={styles.label}>Category:</Text>
             <Picker
@@ -759,6 +814,7 @@ useEffect(() => {
             />
           </View>
 
+          {/* <TouchableOpacity style={styles.submitButton} onPress={handleGetLocation}>  */}
           <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}> 
             <Text style={styles.submitButtonText}>Submit</Text>
           </TouchableOpacity>
@@ -934,6 +990,24 @@ const styles = StyleSheet.create({
   emptyContainer: {
     padding: 20,
     alignItems: 'center',
+  },
+  boxContainer: {
+    flexDirection: 'row', // Set to row for horizontal layout
+    justifyContent: 'space-around', // Space boxes evenly
+    alignItems: 'center', // Center boxes vertically
+    paddingVertical: 20,
+  },
+  box: {
+    width: 100, // Width of the box
+    height: 50, // Height of the box
+    backgroundColor: '#4CAF50', // Box color
+    justifyContent: 'center', // Center text vertically
+    alignItems: 'center', // Center text horizontally
+    
+  },
+  boxText: {
+    color: '#FFFFFF', // Text color
+    fontSize: 16,
   },
 });
 

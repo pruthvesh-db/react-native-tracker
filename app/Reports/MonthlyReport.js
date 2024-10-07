@@ -7,36 +7,52 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import * as Print from 'expo-print';
 import * as FileSystem from 'expo-file-system';
 import { shareAsync } from 'expo-sharing';
+import { ReportContext } from './ReportsAPI';
 
 
 const ExpenseTable = () => {
   const { userToken, ServerIP } = useContext(AuthContext); // Get the auth token from context or another source
+  const { ExpenseData, fetchExpense } = useContext(ReportContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${ServerIP}/api/expense/fetchallexpenses`, {
-          headers: {
-            'auth-token': userToken, // Include the auth token in headers
-          },
-        });
-        setData(response.data);
-      } catch (error) {
-        setError(error);
-        Alert.alert('Error', 'Unable to fetch data. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await axios.get(`${ServerIP}/api/expense/fetchallexpenses`, {
+    //       headers: {
+    //         'auth-token': userToken, // Include the auth token in headers
+    //       },
+    //     });
+    //     setData(response.data);
+    //   } catch (error) {
+    //     setError(error);
+    //     Alert.alert('Error', 'Unable to fetch data. Please try again later.');
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
 
-    fetchData();
-  }, [userToken]); // Include userToken in dependency array to refetch if token changes
+    // fetchData();
+    // fetchExpense();
+    
+  // }, [userToken]); // Include userToken in dependency array to refetch if token changes
+
+  // console.log(ExpanseData);
+  // setData(ExpanseData);
+  // console.log(data);
+
+  // useEffect(() => {
+  //   if (ExpenseData) {
+  //     console.log(`API Res Data ${JSON.stringify(ExpenseData)}`);
+  //   }
+  // }, [ExpenseData]);
+
+
 
   const tableHead = ['Date', 'Category', 'Sub-Category', 'Amount', 'Type', 'Description'];
-  const tableData = data.map(item => [
+  const tableData = ExpenseData.map(item => [
     new Date(item.date).toLocaleDateString(),
     item.category,
     item.sub_category,
@@ -70,14 +86,6 @@ const ExpenseTable = () => {
       </html>
     `;
 
-    // const htmlContent = `
-    //   <html>
-    //     <body>
-    //       <h1>Hello, Expo PDF!</h1>
-    //       <p>This is a PDF generated using Expo's Print module.</p>
-    //     </body>
-    //   </html>
-    // `;
     const generateStatement = async () => {
       const filename = "Statement.pdf";
       // const localhost = Platform.OS === "android" ? "10.0.2.2" : "127.0.0.1";
@@ -123,9 +131,6 @@ const ExpenseTable = () => {
           <Rows data={tableData} textStyle={styles.rowText} />
         </Table>
       </ScrollView>
-      <View style={styles.buttonContainer}>
-        <Button title="Download PDF" onPress={generateStatement} color="#FF5722" />
-      </View>
     </View>
   );
 };

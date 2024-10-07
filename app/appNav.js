@@ -16,6 +16,8 @@ import SignUpPage from "./SignUp";
 import MonthlyReport from "./Reports/MonthlyReport";
 import ProfileDetails from "./ProfileDetails";
 import AddCatagory from "./AddCatagory";
+import ReportEntry from "./Reports/ReportEntry";
+import BottomBar from "./bottomBar";
 // import NavBar from "./navBar";
 
 
@@ -56,8 +58,12 @@ const AppNav = () => {
         <Stack.Screen name="SignUp" component={SignUpPage} options={{ headerShown: false }} />
         <Stack.Screen name="Monthly Report" component={MonthlyReport} options={{ headerShown: false }} />
         <Stack.Screen name="Profile Details" component={ProfileDetails} options={{headerShown: false}} />
-        <Stack.Screen name="Add Catagory" component={AddCatagory} options={{headerShown: false}} />
+        <Stack.Screen name="Add Catagory" component={AddCatagory} options={{headerShown: false}} /> 
+        <Stack.Screen name="Report Entry" component={ReportEntry} options={{headerShown: false}} />
         {/* <Stack.Screen name="navBar" component={NavBar} options={{headerShown: false}} /> */}
+
+        {/* <Stack.Screen name="Bottom Bar" component={BottomBar} options={{headerShown: false}} /> */}
+
 
     </Stack.Navigator>
     </GestureHandlerRootView>

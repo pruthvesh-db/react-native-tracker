@@ -17,7 +17,7 @@ export const AuthProvider = ({children}) => {
     // const {ServerIP} = useContext(ServerContext);
     const [isLoading, setIsLoading] = useState(false);
     const [userToken, setUserToken] = useState(null);
-    const [ServerIP, setServerIP] = useState("http://65.1.92.142:5000");
+    const [ServerIP, setServerIP] = useState("https://api.getapp.co.in");
 
     const login = async (userName, password) => {
         setIsLoading(true);

@@ -9,9 +9,8 @@
       "expo-router"
     ],
     "name": "Expenses",
-    "slug": "Expenses",
+    "slug": "react-native-tracker",
     "extra": {
-      "apiUrl": "http://65.1.92.142:5000",
       "router": {
         "origin": false
       },
