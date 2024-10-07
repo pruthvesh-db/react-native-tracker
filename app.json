@@ -1,16 +1,16 @@
 {
   "expo": {
     "scheme": "acme",
+    "icon": "./assets/images/icon.png",
     "web": {
       "bundler": "metro"
     },
     "plugins": [
       "expo-router"
     ],
-    "name": "react-native-tracker",
+    "name": "Expenses",
     "slug": "react-native-tracker",
     "extra": {
-      "apiUrl": "http://65.1.92.142:5000",
       "router": {
         "origin": false
       },
@@ -24,11 +24,7 @@
         "ACCESS_NETWORK_STATE",
         "ACCESS_WIFI_STATE"
       ],
-      "package": "com.pruthvesh.reactnativetracker",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
+      "package": "com.pruthvesh.reactnativetracker"
     }
   }
 }

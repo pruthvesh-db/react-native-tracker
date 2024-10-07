@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
 import axios from 'axios';
-import { AuthContext } from '../authValidator/authContext'; // Adjust import based on your project structure
+import { AuthContext } from '../authValidator/authContext';
 
 const ProfileDetailsScreen = () => {
-  const { userToken } = useContext(AuthContext); // Fetch the token from the context
+  const { userToken, ServerIP } = useContext(AuthContext); // Fetch the token from the context
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [username, setUsername] = useState('');
@@ -14,7 +14,7 @@ const ProfileDetailsScreen = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.post('http://65.1.92.142:5000/api/auth/getuser', {}, {
+        const response = await axios.post(`${ServerIP}/api/auth/getuser`, {}, {
           headers: {
             'auth-token': userToken, // Pass the token in the header
           }

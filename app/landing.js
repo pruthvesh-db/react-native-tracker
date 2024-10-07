@@ -9,8 +9,10 @@ import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Import the icon library
 import { Button, Divider } from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import NavBar from './navBar';
 import Model from 'react-native-modal'
+import * as Location from 'expo-location';
+import BottomBar from './bottomBar';
+
 
 
 const apiUrl = Constants.expoConfig.extra.apiUrl;
@@ -45,6 +47,43 @@ const LandingTab = ({navigation}) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [contactNo, setContactNo] = useState('');
+
+// _______________________________________________________________________________________________________________________
+
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+useEffect(() => {
+    (async () => {
+      // Request permissions
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      // Get location
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+      console.log(location);
+    })();
+  }, []);
+
+  const handleGetLocation = async () => {
+    // Check permissions
+    let { status } = await Location.getForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied');
+      return;
+    }
+
+    // Get location
+    let location = await Location.getCurrentPositionAsync({});
+    setLocation(location);
+    console.log(location);
+  };
+
+  // ______________________________________________________________________________________________________________
 
   const showDatePicker = () => setDatePickerVisibility(true);
   const hideDatePicker = () => setDatePickerVisibility(false);
@@ -161,10 +200,10 @@ const LandingTab = ({navigation}) => {
     };
 
 // fetchCatagory();
-useEffect(() => {
-  fetchCatagory();
+// useEffect(() => {
+//   fetchCatagory();
 
-}, []);
+// }, []);
 
 useEffect(() => {
   if (search === '') {
@@ -225,15 +264,15 @@ useEffect(() => {
   //   setDate(currentDate);
   // };
 
-  const handleDateChange = (event, selectedDate) => {
-    // The event might be 'undefined' when the user cancels the picker
-    if (event.type === 'set') {
-      setDate(selectedDate || date);
-      setShowDatePicker(false);
-    } else if (event.type === 'dismissed') {
-      setShowDatePicker(false);
-    }
-  };
+  // const handleDateChange = (event, selectedDate) => {
+  //   // The event might be 'undefined' when the user cancels the picker
+  //   if (event.type === 'set') {
+  //     setDate(selectedDate || date);
+  //     setShowDatePicker(false);
+  //   } else if (event.type === 'dismissed') {
+  //     setShowDatePicker(false);
+  //   }
+  // };
 
   const handleSubmit = async () => {
     if (!category || !subCategory || !amount || !description) {
@@ -327,7 +366,6 @@ useEffect(() => {
         </LinearGradient>
       )} */}
 
-      {/* {sidebarVisible && <NavBar/>} */}
       {/* ______________________________________________________________________________________________________________________________ */}
 
       <View >
@@ -335,6 +373,7 @@ useEffect(() => {
 				backdropOpacity={0.8}>
 				<View style={
 					{
+            
 						width: '80%',
 						height: '100%',
             marginLeft: -17,
@@ -345,6 +384,7 @@ useEffect(() => {
 				}>
 					<View style={
 						{
+              flex: 1,
 							width: '80%',
 							height: '95%',
 							backgroundColor: 'white',
@@ -352,7 +392,7 @@ useEffect(() => {
 						}
 					}>
 						<View style={
-							{marginTop: 250}
+							{marginTop: 250, flex: 1,}
 						}>
 							<FlatList data={
 									[
@@ -366,7 +406,8 @@ useEffect(() => {
 											icon: require('../assets/master.png')
 										}, {
 											title: 'Reports',
-                      component: 'Monthly Report',
+                      component: 'Report Entry',
+                      // component: 'Monthly Report',
 											icon: require('../assets/report1.png')
 										}
 									]
@@ -395,7 +436,7 @@ useEffect(() => {
 
 
             <View style={
-							{marginTop: '75%'}
+							{justifyContent: 'flex-end'}
 						}>
 							
 											<TouchableOpacity style={
@@ -466,7 +507,11 @@ useEffect(() => {
 									{
 										fontSize: 18,
 										fontWeight: '600',
-										color: 'black'
+										color: 'black',
+                    width: 100,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
 									}
 								}>{firstName} {lastName}</Text>
 								<Text style={
@@ -562,6 +607,21 @@ useEffect(() => {
           <Text style={styles.headerText}>Add Expense</Text>
         </View>
         <ScrollView contentContainerStyle={styles.content}>
+
+          {/* <View style={styles.boxContainer}>
+            <View style={styles.box}>
+            <Text style={styles.boxText}>Total Income</Text>
+          </View>
+          <View style={styles.box}>
+            <Text style={styles.boxText}>Used Amount</Text>
+          </View>
+          <View style={styles.box}>
+            <Text style={styles.boxText}>Balance Amount</Text>
+          </View>
+          </View> */}
+          {/* <BottomBar/> */}
+
+          
           {/* <View style={styles.formGroup}>
             <Text style={styles.label}>Category:</Text>
             <Picker
@@ -577,7 +637,7 @@ useEffect(() => {
                 </View> */}
     <View style={styles.formGroup}>
                 <Text style={styles.label}>Category:</Text>
-                <TouchableOpacity onPress={() => setCatModalVisible(true)} style={styles.picker}>
+                <TouchableOpacity onPress={() => {{setCatModalVisible(true)}; {fetchCatagory()}}} style={styles.picker}>
                 <Text style={styles.selectedValue}>
                         {category ? categoryOptions.find(option => option.value === category)?.label : 'Select category'}
                         {/* {'Search Category'} */}
@@ -754,6 +814,7 @@ useEffect(() => {
             />
           </View>
 
+          {/* <TouchableOpacity style={styles.submitButton} onPress={handleGetLocation}>  */}
           <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}> 
             <Text style={styles.submitButtonText}>Submit</Text>
           </TouchableOpacity>
@@ -908,7 +969,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     height: 40,
-    borderColor: '#4CAF50',
+    borderColor: 'orange',
     borderWidth: 1,
     borderRadius: 4,
     marginBottom: 10,
@@ -929,6 +990,24 @@ const styles = StyleSheet.create({
   emptyContainer: {
     padding: 20,
     alignItems: 'center',
+  },
+  boxContainer: {
+    flexDirection: 'row', // Set to row for horizontal layout
+    justifyContent: 'space-around', // Space boxes evenly
+    alignItems: 'center', // Center boxes vertically
+    paddingVertical: 20,
+  },
+  box: {
+    width: 100, // Width of the box
+    height: 50, // Height of the box
+    backgroundColor: '#4CAF50', // Box color
+    justifyContent: 'center', // Center text vertically
+    alignItems: 'center', // Center text horizontally
+    
+  },
+  boxText: {
+    color: '#FFFFFF', // Text color
+    fontSize: 16,
   },
 });
 
